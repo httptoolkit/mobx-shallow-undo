@@ -1,0 +1,33 @@
+{
+  "name": "mobx-shallow-undo",
+  "version": "1.0.0",
+  "description": "Drop-in undo & redo for shallow changes in Mobx",
+  "main": "dist/undo.js",
+  "scripts": {
+    "build": "tsc -p ./tsconfig.json",
+    "test": "mocha -r ts-node/register 'test/**/*.spec.ts'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/httptoolkit/mobx-shallow-undo.git"
+  },
+  "keywords": [
+    "mobx",
+    "undo",
+    "redo"
+  ],
+  "author": "Tim Perry <pimterry@gmail.com>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/httptoolkit/mobx-shallow-undo/issues"
+  },
+  "homepage": "https://github.com/httptoolkit/mobx-shallow-undo#readme",
+  "devDependencies": {
+    "@types/chai": "^4.2.14",
+    "@types/mocha": "^8.0.4",
+    "chai": "^4.2.0",
+    "mocha": "^8.2.1",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.0.5"
+  }
+}
