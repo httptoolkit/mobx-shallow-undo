@@ -25,6 +25,8 @@ export function trackUndo<T>(
     return {
         undo: mobx.action(() => {
             if (isDisposed) throw new Error('Undo already disposed');
+            if (undoPointer === 0) return; // No undos available
+
             undoPointer -= 1;
 
             // We have to make this change without our undo stack including it, but

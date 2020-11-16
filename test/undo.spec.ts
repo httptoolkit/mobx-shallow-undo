@@ -52,6 +52,20 @@ describe("Mobx undo", () => {
         expect(obsv.get()).to.equal(123);
     });
 
+    it("does nothing if no undo is available", () => {
+        const obsv = mobx.observable.box<number>(123);
+        const undo = trackUndo(() => obsv.get(), (v) => obsv.set(v));
+
+        set(obsv, 456);
+        expect(obsv.get()).to.equal(456);
+
+        undo.undo();
+        expect(obsv.get()).to.equal(123);
+
+        undo.undo();
+        expect(obsv.get()).to.equal(123);
+    });
+
     it("can redo changes", () => {
         const obsv = mobx.observable.box<number>(123);
         const undo = trackUndo(() => obsv.get(), (v) => obsv.set(v));
@@ -65,6 +79,17 @@ describe("Mobx undo", () => {
 
         undo.redo();
         expect(obsv.get()).to.equal(789);
+    });
+
+    it("does nothing if no redo is available", () => {
+        const obsv = mobx.observable.box<number>(123);
+        const undo = trackUndo(() => obsv.get(), (v) => obsv.set(v));
+
+        set(obsv, 456);
+        expect(obsv.get()).to.equal(456);
+
+        undo.redo();
+        expect(obsv.get()).to.equal(456);
     });
 
     it("can resets redo stack after changes", () => {
