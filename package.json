@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Drop-in undo & redo for shallow changes in Mobx",
   "main": "dist/undo.js",
+  "types": "dist/undo.d.ts",
   "files": [
     "dist/**/*",
     "src/**/*",
