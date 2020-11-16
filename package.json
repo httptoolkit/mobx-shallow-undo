@@ -4,7 +4,7 @@
   "description": "Drop-in undo & redo for shallow changes in Mobx",
   "main": "dist/undo.js",
   "files": [
-    "dist/**/*.{js,.d.ts,map}",
+    "dist/**/*",
     "src/**/*",
     "README.md"
   ],
