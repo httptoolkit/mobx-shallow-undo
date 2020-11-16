@@ -110,6 +110,26 @@ describe("Mobx undo", () => {
         expect(obsv.get()).to.equal(0);
     });
 
+    it("can track a property of an observable objects", () => {
+        const myObservable = mobx.observable({ a: 1 });
+
+        const myUndoer = trackUndo(
+            () => myObservable.a,
+            (value) => { myObservable.a = value }
+        );
+
+        myObservable.a = 2;
+        myObservable.a = 3;
+        myObservable.a = 1000;
+
+        myUndoer.undo();
+        myUndoer.undo();
+        expect(myObservable.a).to.equal(2);
+
+        myUndoer.redo();
+        expect(myObservable.a).to.equal(3);
+    });
+
     it("stops observing after dispose", () => {
         const obsv = mobx.observable.box<number>(123);
         const undo = trackUndo(() => obsv.get(), (v) => obsv.set(v));
