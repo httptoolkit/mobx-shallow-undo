@@ -7,7 +7,7 @@ export function trackUndo<T>(
     let isDisposed = false;
 
     const undoStack: T[] = [readObservable()];
-    let undoPointer = mobx.observable.box( undoStack.length - 1); // Always points to the current value
+    let undoPointer = mobx.observable.box(undoStack.length - 1); // Always points to the current value
 
     let stopTrackingChanges: () => void;
     const trackChanges = () => {
@@ -26,8 +26,8 @@ export function trackUndo<T>(
         undo: mobx.action(() => {
             if (isDisposed) throw new Error('Undo already disposed');
             if (undoPointer.get() === 0) return; // No undos available
-  
-          undoPointer.set(undoPointer.get() - 1);
+
+            undoPointer.set(undoPointer.get() - 1);
 
             // We have to make this change without our undo stack including it, but
             // whilst still letting other external viewers observe this as normal.
@@ -44,11 +44,11 @@ export function trackUndo<T>(
             setObservable(undoStack[undoPointer.get()]);
             trackChanges();
         }),
-        get hasUndo(){
-          return undoPointer.get() !== 0
+        get hasUndo() {
+            return undoPointer.get() !== 0;
         },
-        get hasRedo(){
-          return undoPointer.get() < undoStack.length - 1
+        get hasRedo() {
+            return undoPointer.get() < undoStack.length - 1;
         },
         dispose: () => {
             stopTrackingChanges();

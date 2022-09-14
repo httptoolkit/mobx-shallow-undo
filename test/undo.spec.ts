@@ -61,7 +61,7 @@ describe("Mobx undo", () => {
             undo.undo();
             undo.undo();
         });
-    
+
         expect(undo.hasUndo).to.equal(false);
         expect(undo.hasRedo).to.equal(true);
         expect(obsv.get()).to.equal(123);
@@ -113,7 +113,7 @@ describe("Mobx undo", () => {
         expect(obsv.get()).to.equal(456);
     });
 
-    it("can resets redo stack after changes", () => {
+    it("can reset redo stack after changes", () => {
         const obsv = mobx.observable.box<number>(123);
         const undo = trackUndo(() => obsv.get(), (v) => obsv.set(v));
 
@@ -157,37 +157,37 @@ describe("Mobx undo", () => {
         undo.dispose();
         expect(mobx.getObserverTree(obsv).observers).to.equal(undefined);
     });
-    
-    it("check reaction for hasUndo", (done) => {
+
+    it("triggers reactions from hasUndo", (done) => {
         const obsv = mobx.observable.box<number>(123);
         const undo = trackUndo(() => obsv.get(), (v) => obsv.set(v));
-    
-        reaction(()=>undo.hasUndo,(hasUndo)=>{
+
+        reaction(() => undo.hasUndo, (hasUndo) => {
             expect(hasUndo).to.equal(true);
-            done()
-        })
+            done();
+        });
+
         set(obsv, 789);
         expect(undo.hasUndo).to.equal(true);
         expect(undo.hasRedo).to.equal(false);
-        
     });
-  
-  it("check reaction for hasRedo", (done) => {
-    const obsv = mobx.observable.box<number>(123);
-    const undo = trackUndo(() => obsv.get(), (v) => obsv.set(v));
-    
-    reaction(()=>undo.hasRedo,(hasRedo)=>{
-      expect(hasRedo).to.equal(true);
-      done()
-    })
-    
-    set(obsv, 789);
-    expect(undo.hasUndo).to.equal(true);
-    expect(undo.hasRedo).to.equal(false);
-    undo.undo()
-  
-    expect(undo.hasUndo).to.equal(false);
-    expect(undo.hasRedo).to.equal(true);
-  });
-  
+
+    it("triggers reactions from hasRedo", (done) => {
+        const obsv = mobx.observable.box<number>(123);
+        const undo = trackUndo(() => obsv.get(), (v) => obsv.set(v));
+
+        reaction(() => undo.hasRedo, (hasRedo) => {
+            expect(hasRedo).to.equal(true);
+            done();
+        });
+
+        set(obsv, 789);
+        expect(undo.hasUndo).to.equal(true);
+        expect(undo.hasRedo).to.equal(false);
+        undo.undo();
+
+        expect(undo.hasUndo).to.equal(false);
+        expect(undo.hasRedo).to.equal(true);
+    });
+
 });
