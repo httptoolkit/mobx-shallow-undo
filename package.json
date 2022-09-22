@@ -27,6 +27,9 @@
   "bugs": {
     "url": "https://github.com/httptoolkit/mobx-shallow-undo/issues"
   },
+  "engines": {
+    "node": ">=14.20.0"
+  },
   "homepage": "https://github.com/httptoolkit/mobx-shallow-undo#readme",
   "peerDependencies": {
     "mobx": "^5 || ^6"
