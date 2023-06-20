@@ -10,7 +10,7 @@ If you have some changing but internally immutable state anywhere in your app - 
 
 For example, [HTTP Toolkit](https://httptoolkit.tech/javascript/) uses this to support undo/redo in an autocompleting tagged input field, where undo behaviour needs to manage some of the state in the component, not just the text in the input field itself.
 
-This is designed for _simple_ cases, where a single observable value (or a single property of an observable object) is changing between different immutable values. This does not handle mutations inside the value or track undo states recursively, it just tracks the shallow undo/redo state of an observable (if you want to add undo/redo in any state anywhere though immutability is strongly recommended, or you're going to have a very bad time!)
+This is designed for _simple_ cases, where a single observable value (or a single property of an observable object) is changing between different immutable values. By default, this does not handle mutations inside the value or track undo states recursively, it just tracks the shallow undo/redo state of an observable. To track nested properties you can use [.toJS()](https://mobx.js.org/api.html#tojs) as a workaround.
 
 TL;DR: **Mobx-shallow-undo lets you do this:**
 
@@ -39,6 +39,35 @@ myUndoer.undo();
 myUndoer.redo();
 // myObservable = { a: 3 };
 ```
+
+Handle nested data structures like this:
+
+```javascript
+import React from "react";
+import { render } from "react-dom";
+import * as mobx from "mobx";
+import { trackUndo } from "mobx-shallow-undo";
+
+const myObservable = mobx.observable.array([{ id: 1 }, { id: 2 }]);
+
+const myUndoer = trackUndo(
+  // .toJS() was added to observe a nested structure
+  () => mobx.toJS(myObservable),
+  (value) => {
+    myObservable.replace(value);
+  }
+);
+
+myObservable.push({ id: 3 });
+
+// myObservable = [{ id: 1 }, { id: 2 }, { id: 3 }];
+
+myUndoer.undo();
+
+// myObservable = [{ id: 1 }, { id: 2 }];
+```
+
+Using `observable.array` and its `replace` method is not required. The example above will continue to work with the modern [makeAutoObservable](https://mobx.js.org/observable-state.html#makeautoobservable) Mobx API.
 
 ## Getting Started
 
